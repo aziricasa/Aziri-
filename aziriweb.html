@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aziri Casa - Menü</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        
+        :root {
+            --beige: #F5F1E8;
+            --orange: #D2691E;
+            --dark: #2C1810;
+        }
+        
+        body { background: var(--beige); color: var(--dark); }
+        
+        header {
+            background: var(--dark);
+            color: #E8DCC4;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        header h1 { font-size: 32px; margin-bottom: 10px; }
+        header p { font-size: 16px; opacity: 0.9; }
+        
+        nav {
+            background: white;
+            padding: 15px 10px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        nav button {
+            background: var(--orange);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 3px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .menu-container {
+            padding: 20px;
+            display: grid;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-right: 4px solid var(--orange);
+        }
+        
+        .card h3 {
+            color: var(--orange);
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        
+        .desc {
+            color: #666;
+            font-size: 15px;
+            margin: 8px 0;
+        }
+        
+        .price {
+            color: var(--dark);
+            font-weight: bold;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: #E8DCC4;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 30px;
+        }
+        
+        .badge-halal { background: #2E7D32; }
+        .badge-veg { background: #FF9800; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>AZIRI CASA</h1>
+    <p>Der Geschmack, der uns zusammenbringt</p>
+    <p style="font-size: 14px; margin-top: 10px;">Koppreitergasse 10, 1120 Wien | Tel: 0681 20800852</p>
+</header>
+
+<nav id="navButtons">
+    <button onclick="filter('all')">الكل</button>
+    <button onclick="filter('metzgerei')">ميتاكايسن</button>
+    <button onclick="filter('pizza')">بيتزا</button>
+    <button onclick="filter('lokal')">محلي</button>
+    <button onclick="filter('italienisch')">إيطالي</button>
+    <button onclick="filter('mezze')">مقبلات</button>
+    <button onclick="filter('dessert')">حلويات</button>
+</nav>
+
+<div id="menu" class="menu-container">
+    <!-- سيتم ملؤها بالJavaScript -->
+</div>
+
+<footer>
+    <p>von 12.00 bis 15.00 Uhr | Sonntag geschlossen</p>
+    <p style="margin-top: 10px; font-size: 14px;">100% Halal | Arabische Hände</p>
+</footer>
+
+<script>
+// ✅ قائمة الأطباق مدمجة داخل الكود (ثابتة دائماً)
+const menuData = [
+    // ميتاكايسن
+    { name: "Wiener Schnitzel", price: "€13.50", cat: "lokal", desc: "مع سلطة البطاطس", halal: true },
+    { name: "Tafelspitz", price: "€14.90", cat: "lokal", desc: "مع تفاح وخردل", halal: true },
+    { name: "Gulasch", price: "€11.50", cat: "lokal", desc: "لحم بقري مع خبز", halal: true },
+    { name: "Hausgemachte Köfte", price: "€8.90", cat: "metzgerei", desc: "كرات لحم مشوية مع أرز", halal: true },
+    { name: "Schisch Tawook", price: "€9.50", cat: "metzgerei", desc: "دجاج مشوي على الفحم مع ثومية", halal: true },
+    
+    // بيتزا
+    { name: "Margherita", price: "€7.90", cat: "pizza", desc: "طماطم، موزاريلا، ريحان", veggie: true },
+    { name: "Diavola", price: "€10.50", cat: "pizza", desc: "سلامي حار (حلال) وفلفل", halal: true },
+    { name: "Orient Spezial", price: "€11.90", cat: "pizza", desc: "دجاج، خضروات، صلصة الطحينة", halal: true },
+    { name: "Quattro Formaggi", price: "€9.90", cat: "pizza", desc: "أربعة أنواع جبن", veggie: true },
+    
+    // إيطالي
+    { name: "Spaghetti Bolognese", price: "€9.90", cat: "italienisch", desc: "صلصة لحم حلال", halal: true },
+    { name: "Penne Arrabbiata", price: "€8.50", cat: "italienisch", desc: "صلصة طماطم حارة", veggie: true },
+    { name: "Risotto Funghi", price: "€10.90", cat: "italienisch", desc: "أرز مع فطر وباميزان", veggie: true },
+    
+    // مقبلات لبنانية
+    { name: "Hummus", price: "€5.50", cat: "mezze", desc: "هريس حمص مع طحينة وليمون", veggie: true },
+    { name: "Taboulé", price: "€6.00", cat: "mezze", desc: "سلطة بقدونس وبرغل", veggie: true },
+    { name: "Warak Enab", price: "€6.50", cat: "mezze", desc: "ورق عنب محشي بالأرز", veggie: true },
+    { name: "Falafel (6 Stück)", price: "€5.90", cat: "mezze", desc: "كرات حمص مقلية", veggie: true },
+    
+    // حلويات
+    { name: "Crêpe Nutella", price: "€6.50", cat: "dessert", desc: "كريب فرنسي مع نوتيلا", veggie: true },
+    { name: "Baklava", price: "€4.50", cat: "dessert", desc: "بقلاوة تركية بالجوز", veggie: true },
+    { name: "Künefe", price: "€5.90", cat: "dessert", desc: "كنافة تركية ساخنة بالجبن", veggie: true }
+];
+
+function renderMenu(filterCat = 'all') {
+    const container = document.getElementById('menu');
+    const filtered = filterCat === 'all' 
+        ? menuData 
+        : menuData.filter(item => item.cat === filterCat);
+    
+    container.innerHTML = filtered.map(item => `
+        <div class="card">
+            <h3>${item.name}</h3>
+            <p class="desc">${item.desc}</p>
+            <div>
+                ${item.halal ? '<span class="badge badge-halal">Halal</span>' : ''}
+                ${item.veggie ? '<span class="badge badge-veg">Vegetarisch</span>' : ''}
+            </div>
+            <div class="price">${item.price}</div>
+            <small style="color: #999; font-size: 12px;">${getCatName(item.cat)}</small>
+        </div>
+    `).join('');
+}
+
+function getCatName(cat) {
+    const names = {
+        metzgerei: 'ميتاكايسن / Metzgerei',
+        pizza: 'بيتزا / Pizza',
+        lokal: 'محلي / Lokal',
+        italienisch: 'إيطالي / Italienisch',
+        mezze: 'مقبلات / Mezze',
+        dessert: 'حلويات / Dessert'
+    };
+    return names[cat] || cat;
+}
+
+function filter(cat) {
+    renderMenu(cat);
+}
+
+// عرض الكل عند التحميل
+renderMenu('all');
+</script>
+
+</body>
+</html>
